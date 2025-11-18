@@ -11,6 +11,9 @@
 ## ✨ Features
 
 - 📡 **FTP Server** - Receives documents from network scanners
+- 🚀 **Async Processing Queue** - ThreadPoolExecutor with worker pool for non-blocking uploads
+- 🔄 **Automatic Retries** - Exponential backoff for failed processing attempts
+- 🎯 **Idempotency** - SHA256 checksum tracking in SQLite to prevent duplicate processing
 - 🔍 **OCR Processing** - Extracts text from scanned PDFs using Tesseract
 - 🤖 **AI-Powered Naming** - Generates descriptive filenames in French using Ollama
 - ☁️ **Nextcloud Integration** - Automatically uploads processed documents via WebDAV
@@ -91,6 +94,9 @@
 | `OLLAMA_HOST` | Ollama service URL | `http://localhost:11434` |
 | `OLLAMA_MODEL` | Ollama model to use | `llama3.2` |
 | `TESSERACT_PATH` | Path to Tesseract executable | System PATH |
+| `PROCESSING_MAX_WORKERS` | Thread pool size for async processing | `4` |
+| `PROCESSING_MAX_RETRIES` | Maximum retry attempts for failed uploads | `3` |
+| `PROCESSING_DB_PATH` | SQLite database path for tracking processed files | `./processed.db` |
 
 ---
 
