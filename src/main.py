@@ -8,6 +8,7 @@ from colorama import Fore, Style, init
 
 from services.DocumentProcessor import DocumentProcessor
 from services.ScannerHandler import ScannerHandler
+from services.ProcessingManager import ProcessingManager
 
 # Initialize colorama for Windows compatibility
 init(autoreset=True)
@@ -54,7 +55,14 @@ def setup_ftp_server():
     handler.authorizer = authorizer
     handler.banner = "Montscan FTP Server Ready"
 
-    handler.processor = DocumentProcessor()
+    processor = DocumentProcessor()
+    handler.processor = processor
+
+    # Configure ProcessingManager with environment variables
+    max_workers = int(os.getenv('PROCESSING_MAX_WORKERS', '4'))
+    max_retries = int(os.getenv('PROCESSING_MAX_RETRIES', '3'))
+    db_path = os.getenv('PROCESSING_DB_PATH', './processed.db')
+    handler.manager = ProcessingManager(processor, db_path=db_path, max_workers=max_workers, max_retries=max_retries)
 
     server = FTPServer((ftp_host, ftp_port), handler)
     server.max_cons = 256
